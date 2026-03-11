@@ -1,0 +1,20 @@
+name: obsidian_dart
+description: "Single-package Dart toolkit + runtime for building Obsidian plugins without TypeScript."
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  rpc_dart: ^2.4.1
+  args: ^2.5.0
+  path: ^1.9.1
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
+
+executables:
+  obsidian_build: build_plugin
+  obsidian_manifest: build_manifest
