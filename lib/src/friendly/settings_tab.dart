@@ -27,10 +27,14 @@ class PluginSettingsTab {
   /// [onDisplay] is called every time Obsidian opens this settings tab.
   /// The tab's [containerEl] is cleared before calling [onDisplay], so the
   /// builder always starts with an empty container.
-  PluginSettingsTab(this.plugin, {String? name, void Function(PluginSettingsTab)? onDisplay, Future<void> Function(PluginSettingsTab)? onDisplayAsync}) {
+  PluginSettingsTab(this.plugin,
+      {String? name,
+      void Function(PluginSettingsTab)? onDisplay,
+      Future<void> Function(PluginSettingsTab)? onDisplayAsync}) {
     _onDisplay = onDisplay;
     _onDisplayAsync = onDisplayAsync;
-    _tabHandle = createSettingTab(plugin, name: name, onDisplay: _handleDisplay);
+    _tabHandle =
+        createSettingTab(plugin, name: name, onDisplay: _handleDisplay);
   }
 
   final PluginHandle plugin;

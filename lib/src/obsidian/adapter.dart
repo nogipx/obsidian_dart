@@ -20,8 +20,8 @@ class AdapterHandle {
 
   /// Read file as text
   Future<String> read(String path) => jsu.promiseToFuture<String>(
-    jsu.callMethod<Object?>(raw, 'read', [path])!,
-  );
+        jsu.callMethod<Object?>(raw, 'read', [path])!,
+      );
 
   /// Read file as binary (ArrayBuffer -> Uint8List)
   Future<Uint8List> readBinary(String path) async {
@@ -77,7 +77,9 @@ class AdapterHandle {
     );
     final arrayBuffer = jsu.getProperty<JSObject>(jsUint8Array, 'buffer');
 
-    final args = options != null ? [path, arrayBuffer, options.toJS()] : [path, arrayBuffer];
+    final args = options != null
+        ? [path, arrayBuffer, options.toJS()]
+        : [path, arrayBuffer];
     await jsu.promiseToFuture<void>(
       jsu.callMethod<Object?>(raw, 'writeBinary', args)!,
     );
@@ -135,19 +137,21 @@ class AdapterHandle {
       jsu.callMethod<Object?>(raw, 'list', [path])!,
     );
     final files = jsu.getProperty<JSArray>(res, 'files').toDart.cast<String>();
-    final folders = jsu.getProperty<JSArray>(res, 'folders').toDart.cast<String>();
+    final folders =
+        jsu.getProperty<JSArray>(res, 'folders').toDart.cast<String>();
     return ListedFilesHandle(files: List.of(files), folders: List.of(folders));
   }
 
   /// Get resource path for a file
-  String getResourcePath(String path) => jsu.callMethod<String>(raw, 'getResourcePath', [path]);
+  String getResourcePath(String path) =>
+      jsu.callMethod<String>(raw, 'getResourcePath', [path]);
 
   // ===== Directory Operations =====
 
   /// Create a directory
   Future<void> mkdir(String path) => jsu.promiseToFuture<void>(
-    jsu.callMethod<Object?>(raw, 'mkdir', [path])!,
-  );
+        jsu.callMethod<Object?>(raw, 'mkdir', [path])!,
+      );
 
   /// Remove a directory
   ///
@@ -160,8 +164,8 @@ class AdapterHandle {
 
   /// Remove a file
   Future<void> remove(String path) => jsu.promiseToFuture<void>(
-    jsu.callMethod<Object?>(raw, 'remove', [path])!,
-  );
+        jsu.callMethod<Object?>(raw, 'remove', [path])!,
+      );
 
   // ===== Trash Operations =====
 
@@ -169,25 +173,25 @@ class AdapterHandle {
   ///
   /// Returns true if successful.
   Future<bool> trashSystem(String path) => jsu.promiseToFuture<bool>(
-    jsu.callMethod<Object?>(raw, 'trashSystem', [path])!,
-  );
+        jsu.callMethod<Object?>(raw, 'trashSystem', [path])!,
+      );
 
   /// Move to local .trash folder
   Future<void> trashLocal(String path) => jsu.promiseToFuture<void>(
-    jsu.callMethod<Object?>(raw, 'trashLocal', [path])!,
-  );
+        jsu.callMethod<Object?>(raw, 'trashLocal', [path])!,
+      );
 
   // ===== File Operations =====
 
   /// Rename/move a file or folder
   Future<void> rename(String from, String to) => jsu.promiseToFuture<void>(
-    jsu.callMethod<Object?>(raw, 'rename', [from, to])!,
-  );
+        jsu.callMethod<Object?>(raw, 'rename', [from, to])!,
+      );
 
   /// Copy a file or folder
   Future<void> copy(String from, String to) => jsu.promiseToFuture<void>(
-    jsu.callMethod<Object?>(raw, 'copy', [from, to])!,
-  );
+        jsu.callMethod<Object?>(raw, 'copy', [from, to])!,
+      );
 }
 
 /// Result of listing directory contents.

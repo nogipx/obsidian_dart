@@ -45,11 +45,15 @@ class PluginHandle {
     String tooltip,
     FutureOr<void> Function()? onClick,
   ) {
-    final handler = onClick != null ? jsu.allowInterop((JSAny? _) async => onClick()) : null;
-    return jsu.callMethod<JSObject>(_plugin, 'addRibbonIcon', [icon, tooltip, handler]);
+    final handler = onClick != null
+        ? jsu.allowInterop((JSAny? _) async => onClick())
+        : null;
+    return jsu.callMethod<JSObject>(
+        _plugin, 'addRibbonIcon', [icon, tooltip, handler]);
   }
 
-  JSObject addStatusBarItem() => jsu.callMethod<JSObject>(_plugin, 'addStatusBarItem', []);
+  JSObject addStatusBarItem() =>
+      jsu.callMethod<JSObject>(_plugin, 'addStatusBarItem', []);
 
   void registerEvent(JSObject eventRef) =>
       jsu.callMethod<Object?>(_plugin, 'registerEvent', [eventRef]);
@@ -109,7 +113,8 @@ class StatusItem {
   final JSObject el;
   JSObject get raw => el;
 
-  void setText(String text) => jsu.setProperty<dynamic>(el, 'textContent', text);
+  void setText(String text) =>
+      jsu.setProperty<dynamic>(el, 'textContent', text);
 
   void setIcon(String iconSvgOrText) {
     if (iconSvgOrText.trim().startsWith('<')) {
@@ -131,5 +136,6 @@ class StatusItem {
     ]);
   }
 
-  void setClass(String className) => jsu.setProperty<dynamic>(el, 'className', className);
+  void setClass(String className) =>
+      jsu.setProperty<dynamic>(el, 'className', className);
 }

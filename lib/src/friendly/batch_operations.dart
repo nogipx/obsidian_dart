@@ -35,8 +35,7 @@ class BatchResult<T> {
   int get failureCount => failed.length;
 
   @override
-  String toString() =>
-      'BatchResult('
+  String toString() => 'BatchResult('
       'succeeded: $successCount, '
       'failed: $failureCount'
       ')';
@@ -404,7 +403,8 @@ class BatchFileOperations {
       try {
         final newName = pattern(file.name);
         // Preserve directory structure
-        final parentPath = file.path.substring(0, file.path.lastIndexOf('/') + 1);
+        final parentPath =
+            file.path.substring(0, file.path.lastIndexOf('/') + 1);
         final newPath = '$parentPath$newName';
 
         await _vault.rename(file, newPath);

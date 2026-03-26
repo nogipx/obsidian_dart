@@ -1,17 +1,25 @@
 name: obsidian_dart
-description: "Single-package Dart toolkit + runtime for building Obsidian plugins without TypeScript."
+description: "Dart toolkit and runtime for building Obsidian plugins without TypeScript. Compiles to CommonJS for Obsidian 1.7+."
 version: 0.1.0
-publish_to: none
+
+repository: https://github.com/nogipx/obsidian_dart
+issue_tracker: https://github.com/nogipx/obsidian_dart/issues
+
+topics:
+  - obsidian
+  - plugin
+  - js-interop
 
 environment:
-  sdk: ^3.10.1
+  sdk: ^3.1.0
 
 dependencies:
-  args: ^2.5.0
+  args: ^2.7.0
+  meta: ^1.18.2
   path: ^1.9.1
 
 dev_dependencies:
-  lints: ^6.0.0
+  lints: ^4.0.0
   test: ^1.25.6
 
 executables:

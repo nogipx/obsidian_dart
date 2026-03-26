@@ -32,13 +32,14 @@ class WorkspaceHandle {
   Future<void> openFile(
     TFileHandle file, {
     bool newLeaf = false,
-  }) => jsu.promiseToFuture<void>(
-    jsu.callMethod<Object?>(_ws, 'openLinkText', [
-      file.path,
-      '',
-      newLeaf,
-    ])!,
-  );
+  }) =>
+      jsu.promiseToFuture<void>(
+        jsu.callMethod<Object?>(_ws, 'openLinkText', [
+          file.path,
+          '',
+          newLeaf,
+        ])!,
+      );
 
   /// Register an event listener.
   ///

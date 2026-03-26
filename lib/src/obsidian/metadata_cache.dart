@@ -11,7 +11,8 @@ class MetadataCacheHandle {
   JSObject? getFileCache(TFileHandle file) =>
       jsu.callMethod<JSObject?>(_cache, 'getFileCache', [file.raw]);
 
-  JSObject? getCache(String path) => jsu.callMethod<JSObject?>(_cache, 'getCache', [path]);
+  JSObject? getCache(String path) =>
+      jsu.callMethod<JSObject?>(_cache, 'getCache', [path]);
 
   JSObject on(String event, JSFunction handler) =>
       jsu.callMethod<JSObject>(_cache, 'on', [event, handler]);

@@ -50,8 +50,11 @@ Future<void> main(List<String> args) async {
   final release = parsed['release'] as bool;
   final pluginClass = parsed['plugin-class'] as String;
 
-  final packageDir = p.normalize(p.join(File(Platform.script.toFilePath()).parent.path, '..'));
-  final entry = p.isAbsolute(entryOpt) ? entryOpt : p.normalize(p.join(packageDir, entryOpt));
+  final packageDir =
+      p.normalize(p.join(File(Platform.script.toFilePath()).parent.path, '..'));
+  final entry = p.isAbsolute(entryOpt)
+      ? entryOpt
+      : p.normalize(p.join(packageDir, entryOpt));
   if (!File(entry).existsSync()) {
     stderr.writeln('Entry file not found: $entry');
     exitCode = 64;

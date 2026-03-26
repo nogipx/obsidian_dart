@@ -9,13 +9,16 @@ class AppHandle {
   final JSObject _app;
 
   JSObject get raw => _app;
-  VaultHandle get vault => VaultHandle(jsu.getProperty<JSObject>(_app, 'vault'));
-  WorkspaceHandle get workspace => WorkspaceHandle(jsu.getProperty<JSObject>(_app, 'workspace'));
+  VaultHandle get vault =>
+      VaultHandle(jsu.getProperty<JSObject>(_app, 'vault'));
+  WorkspaceHandle get workspace =>
+      WorkspaceHandle(jsu.getProperty<JSObject>(_app, 'workspace'));
   MetadataCacheHandle get metadataCache =>
       MetadataCacheHandle(jsu.getProperty<JSObject>(_app, 'metadataCache'));
   SecretStorageHandle get secretStorage => SecretStorageHandle(
-    jsu.getProperty<JSObject?>(_app, 'secretStorage') ?? jsu.newObject<JSObject>(),
-  );
+        jsu.getProperty<JSObject?>(_app, 'secretStorage') ??
+            jsu.newObject<JSObject>(),
+      );
 
   JSObject get keymap => jsu.getProperty<JSObject>(_app, 'keymap');
 }

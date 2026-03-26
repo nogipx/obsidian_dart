@@ -21,7 +21,8 @@ Future<void> main(List<String> args) async {
   final pluginId = parsed['plugin-id'] as String;
   final outRoot = parsed['out'] as String;
 
-  final packageDir = p.normalize(p.join(File(Platform.script.toFilePath()).parent.path, '..'));
+  final packageDir =
+      p.normalize(p.join(File(Platform.script.toFilePath()).parent.path, '..'));
 
   await buildManifest(
     packageDir: packageDir,
@@ -29,5 +30,6 @@ Future<void> main(List<String> args) async {
     outDir: p.join(packageDir, outRoot),
   );
 
-  stdout.writeln('Generated manifest at ${p.join(packageDir, outRoot, pluginId, 'manifest.json')}');
+  stdout.writeln(
+      'Generated manifest at ${p.join(packageDir, outRoot, pluginId, 'manifest.json')}');
 }

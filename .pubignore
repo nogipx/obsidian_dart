@@ -1,0 +1,19 @@
+# Development tooling
+.dart_tool/
+.fvm/
+.idea/
+.vscode/
+.DS_Store
+.chats/
+.docs/
+
+# Build output
+build/
+coverage/
+
+# CI/local scripts
+justfile
+
+# Sensitive files
+*.pem
+*.bin

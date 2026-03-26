@@ -35,7 +35,8 @@ class TFileHandle extends TAbstractFileHandle {
   TFileHandle(super.raw);
 
   /// File statistics (size, timestamps)
-  FileStatsHandle get stat => FileStatsHandle(jsu.getProperty<JSObject>(raw, 'stat'));
+  FileStatsHandle get stat =>
+      FileStatsHandle(jsu.getProperty<JSObject>(raw, 'stat'));
 
   /// File name without extension
   String get basename => jsu.getProperty<String>(raw, 'basename');

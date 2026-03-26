@@ -154,8 +154,7 @@ class FileMetadata {
       isFolder.hashCode;
 
   @override
-  String toString() =>
-      'FileMetadata('
+  String toString() => 'FileMetadata('
       'path: $path, '
       'name: $name, '
       'ext: $extension, '

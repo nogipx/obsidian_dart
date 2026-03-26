@@ -15,7 +15,8 @@ class PluginSettingTabHandle {
   final PluginHandle plugin;
 
   /// Get the container element for this settings tab.
-  JSObject get containerEl => jsu.getProperty<JSObject>(_settingTab, 'containerEl');
+  JSObject get containerEl =>
+      jsu.getProperty<JSObject>(_settingTab, 'containerEl');
 
   /// Display the settings tab (called by Obsidian when tab is opened).
   void display() => jsu.callMethod<void>(_settingTab, 'display', []);
@@ -133,7 +134,8 @@ class SettingHandle {
 /// ```
 SettingHandle createSetting(JSObject containerEl) {
   final settingCtor = obsidianExport('Setting');
-  return SettingHandle(jsu.callConstructor<JSObject>(settingCtor, [containerEl]));
+  return SettingHandle(
+      jsu.callConstructor<JSObject>(settingCtor, [containerEl]));
 }
 
 /// Wrapper for Obsidian's TextComponent.

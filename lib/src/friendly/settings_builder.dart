@@ -30,7 +30,8 @@ class SettingsBuilder<T> {
   final SettingsManager<T> manager;
 
   /// Build settings UI from declarative configuration.
-  Future<void> build(void Function(SettingsBuilderContext<T> ctx) builder) async {
+  Future<void> build(
+      void Function(SettingsBuilderContext<T> ctx) builder) async {
     final settings = await manager.get();
     final tab = PluginSettingsTab(plugin);
     final ctx = SettingsBuilderContext._(tab, manager, settings);

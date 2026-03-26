@@ -30,7 +30,8 @@ Future<String?> showPasswordPrompt(
     plugin,
     build: (ctx) {
       ctx.h3(title);
-      final input = ctx.input(type: 'password', placeholder: placeholder)..focus();
+      final input = ctx.input(type: 'password', placeholder: placeholder)
+        ..focus();
       ctx
         ..buttonRow(
           [
@@ -75,7 +76,8 @@ Future<String?> showTextPrompt(
 /// Fluent helpers to build modal content.
 class ModalContext<T> {
   ModalContext._(PluginHandle plugin)
-    : _modal = jsu.callConstructor<JSObject>(obsidianExport('Modal'), [plugin.app.raw]) {
+      : _modal = jsu.callConstructor<JSObject>(
+            obsidianExport('Modal'), [plugin.app.raw]) {
     contentEl = jsu.getProperty<JSObject>(_modal, 'contentEl');
     jsu.setProperty(
       _modal,
@@ -112,7 +114,8 @@ class ModalContext<T> {
 
   void row(void Function(LayoutContext ctx) build, {String? cls}) {
     final el = createEl('div', cls: cls);
-    jsu.setProperty(el, 'style', 'display: flex; flex-direction: row; align-items: center');
+    jsu.setProperty(
+        el, 'style', 'display: flex; flex-direction: row; align-items: center');
     build(LayoutContext(el));
   }
 
@@ -126,7 +129,8 @@ class ModalContext<T> {
   SpinnerRef spinner({String label = '', String? style}) {
     final el = createEl(
       'span',
-      style: 'display: none; color: var(--text-muted); font-size: 0.85em${style != null ? '; $style' : ''}',
+      style:
+          'display: none; color: var(--text-muted); font-size: 0.85em${style != null ? '; $style' : ''}',
     );
     return SpinnerRef(el, label: label);
   }
@@ -151,7 +155,10 @@ class ModalContext<T> {
     final checkbox = jsu.callMethod<JSObject>(labelEl, 'createEl', ['input']);
     jsu.setProperty(checkbox, 'type', 'checkbox');
     jsu.setProperty(checkbox, 'checked', initialValue);
-    jsu.callMethod<JSObject>(labelEl, 'createEl', ['span', jsu.jsify({'text': ' $label'})]);
+    jsu.callMethod<JSObject>(labelEl, 'createEl', [
+      'span',
+      jsu.jsify({'text': ' $label'})
+    ]);
     jsu.callMethod<Object?>(checkbox, 'addEventListener', [
       'change',
       jsu.allowInterop((JSObject e) {
@@ -163,7 +170,9 @@ class ModalContext<T> {
   /// Shows an error message inside the modal (replaces previous error if any).
   void showError(String message) {
     final existing = jsu.callMethod<JSObject?>(
-      contentEl, 'querySelector', ['.rhyolite-modal-error'],
+      contentEl,
+      'querySelector',
+      ['.rhyolite-modal-error'],
     );
     if (existing != null) {
       setText(existing, message);
@@ -254,7 +263,8 @@ class ModalContext<T> {
 enum ButtonVariant { secondary, primary, destructive }
 
 class ButtonSpec {
-  const ButtonSpec(this.label, this.onClick, {this.variant = ButtonVariant.secondary});
+  const ButtonSpec(this.label, this.onClick,
+      {this.variant = ButtonVariant.secondary});
   final String label;
   final void Function() onClick;
   final ButtonVariant variant;
@@ -290,7 +300,8 @@ class SpinnerRef {
   static const _frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 
   void show() {
-    jsu.setProperty(_el, 'style', 'display: inline; color: var(--text-muted); font-size: 0.85em');
+    jsu.setProperty(_el, 'style',
+        'display: inline; color: var(--text-muted); font-size: 0.85em');
     _intervalId = jsu.callMethod<Object>(jsu.globalThis, 'setInterval', [
       jsu.allowInterop(() {
         _frame = (_frame + 1) % _frames.length;
@@ -342,7 +353,8 @@ class LayoutContext {
 
   void row(void Function(LayoutContext ctx) build, {String? cls}) {
     final el = createEl('div', cls: cls);
-    jsu.setProperty(el, 'style', 'display: flex; flex-direction: row; align-items: center');
+    jsu.setProperty(
+        el, 'style', 'display: flex; flex-direction: row; align-items: center');
     build(LayoutContext(el));
   }
 

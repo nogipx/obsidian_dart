@@ -15,7 +15,8 @@ class VaultHandle {
   final JSObject _vault;
 
   /// Data adapter for low-level file operations
-  AdapterHandle get adapter => AdapterHandle(jsu.getProperty<JSObject>(_vault, 'adapter'));
+  AdapterHandle get adapter =>
+      AdapterHandle(jsu.getProperty<JSObject>(_vault, 'adapter'));
 
   /// Config directory path (typically `.obsidian`)
   String get configDir => jsu.getProperty<String>(_vault, 'configDir');
@@ -26,7 +27,8 @@ class VaultHandle {
   String getName() => jsu.callMethod<String>(_vault, 'getName', []);
 
   /// Get the root folder of the vault
-  TFolderHandle getRoot() => TFolderHandle(jsu.callMethod<JSObject>(_vault, 'getRoot', []));
+  TFolderHandle getRoot() =>
+      TFolderHandle(jsu.callMethod<JSObject>(_vault, 'getRoot', []));
 
   // ===== File/Folder Retrieval =====
 
@@ -44,7 +46,8 @@ class VaultHandle {
 
   /// Get a file or folder by path. Returns null if it doesn't exist.
   TAbstractFileHandle? getAbstractFileByPath(String path) {
-    final res = jsu.callMethod<JSObject?>(_vault, 'getAbstractFileByPath', [path]);
+    final res =
+        jsu.callMethod<JSObject?>(_vault, 'getAbstractFileByPath', [path]);
     return res == null ? null : TAbstractFileHandle(res);
   }
 
@@ -72,21 +75,22 @@ class VaultHandle {
   ///
   /// Use this if you intend to modify the file content afterwards.
   Future<String> read(TFileHandle file) => jsu.promiseToFuture<String>(
-    jsu.callMethod<Object?>(_vault, 'read', [file.raw])!,
-  );
+        jsu.callMethod<Object?>(_vault, 'read', [file.raw])!,
+      );
 
   /// Read file content from cache.
   ///
   /// Use this if you just want to display content and don't need the latest version.
   Future<String> cachedRead(TFileHandle file) => jsu.promiseToFuture<String>(
-    jsu.callMethod<Object?>(_vault, 'cachedRead', [file.raw])!,
-  );
+        jsu.callMethod<Object?>(_vault, 'cachedRead', [file.raw])!,
+      );
 
   /// Read file content as binary (ArrayBuffer).
   ///
   /// Note: Obsidian API returns ArrayBuffer, we convert to Uint8List.
   /// Internally delegates to adapter.readBinary for conversion.
-  Future<Uint8List> readBinary(TFileHandle file) => adapter.readBinary(file.path);
+  Future<Uint8List> readBinary(TFileHandle file) =>
+      adapter.readBinary(file.path);
 
   /// Get resource path for a file (used for embedding)
   String getResourcePath(TFileHandle file) =>
@@ -124,7 +128,9 @@ class VaultHandle {
     );
     final arrayBuffer = jsu.getProperty<JSObject>(jsUint8Array, 'buffer');
 
-    final args = options != null ? [path, arrayBuffer, options.toJS()] : [path, arrayBuffer];
+    final args = options != null
+        ? [path, arrayBuffer, options.toJS()]
+        : [path, arrayBuffer];
     final res = await jsu.promiseToFuture<JSObject>(
       jsu.callMethod<Object?>(_vault, 'createBinary', args)!,
     );
@@ -152,7 +158,8 @@ class VaultHandle {
     String data, [
     DataWriteOptions? options,
   ]) async {
-    final args = options != null ? [file.raw, data, options.toJS()] : [file.raw, data];
+    final args =
+        options != null ? [file.raw, data, options.toJS()] : [file.raw, data];
     await jsu.promiseToFuture<void>(
       jsu.callMethod<Object?>(_vault, 'modify', args)!,
     );
@@ -185,7 +192,8 @@ class VaultHandle {
     String data, [
     DataWriteOptions? options,
   ]) async {
-    final args = options != null ? [file.raw, data, options.toJS()] : [file.raw, data];
+    final args =
+        options != null ? [file.raw, data, options.toJS()] : [file.raw, data];
     await jsu.promiseToFuture<void>(
       jsu.callMethod<Object?>(_vault, 'append', args)!,
     );
@@ -200,7 +208,8 @@ class VaultHandle {
     DataWriteOptions? options,
   ]) async {
     final jsFn = jsu.allowInterop(fn);
-    final args = options != null ? [file.raw, jsFn, options.toJS()] : [file.raw, jsFn];
+    final args =
+        options != null ? [file.raw, jsFn, options.toJS()] : [file.raw, jsFn];
     return jsu.promiseToFuture<String>(
       jsu.callMethod<Object?>(_vault, 'process', args)!,
     );
@@ -257,7 +266,8 @@ class VaultHandle {
     String path,
     Uint8List bytes, [
     DataWriteOptions? options,
-  ]) => adapter.writeBinary(path, bytes, options);
+  ]) =>
+      adapter.writeBinary(path, bytes, options);
 
   // ===== Events =====
 

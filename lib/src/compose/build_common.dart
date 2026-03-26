@@ -21,7 +21,8 @@ Future<void> buildPlugin({
   Map<String, String> defines = const {},
 }) async {
   final absPackageDir = p.normalize(packageDir);
-  final pluginOut = Directory(p.join(outDir, pluginId))..createSync(recursive: true);
+  final pluginOut = Directory(p.join(outDir, pluginId))
+    ..createSync(recursive: true);
 
   final dartJsPath = p.join(pluginOut.path, 'dart_app.js');
 
@@ -47,9 +48,9 @@ Future<void> buildPlugin({
   }
 
   final dartJsBody = dartJs.readAsStringSync().replaceAll(
-    RegExp(r'\n?//# sourceMappingURL=.*'),
-    '',
-  );
+        RegExp(r'\n?//# sourceMappingURL=.*'),
+        '',
+      );
 
   final main = StringBuffer()
     ..writeln("const { Plugin } = require('obsidian');")
@@ -85,10 +86,12 @@ Future<void> buildManifest({
   required String packageDir,
   required String pluginId,
   required String outDir,
-  Map<String, Object?> Function({required Map<String, Object?> base})? transform,
+  Map<String, Object?> Function({required Map<String, Object?> base})?
+      transform,
 }) async {
   final absPackageDir = p.normalize(packageDir);
-  final pluginOut = Directory(p.join(outDir, pluginId))..createSync(recursive: true);
+  final pluginOut = Directory(p.join(outDir, pluginId))
+    ..createSync(recursive: true);
 
   final manifest = await _defaultManifest(
     pluginId: pluginId,
@@ -96,7 +99,8 @@ Future<void> buildManifest({
   );
   final result = transform != null ? transform(base: manifest) : manifest;
 
-  File(p.join(pluginOut.path, 'manifest.json')).writeAsStringSync(_prettyJson(result));
+  File(p.join(pluginOut.path, 'manifest.json'))
+      .writeAsStringSync(_prettyJson(result));
 }
 
 Future<Map<String, Object?>> _defaultManifest({
@@ -134,7 +138,8 @@ String _titleCase(String value) => value
     .map((p) => p[0].toUpperCase() + p.substring(1))
     .join(' ');
 
-String _prettyJson(Map<String, Object?> json) => const JsonEncoder.withIndent('  ').convert(json);
+String _prettyJson(Map<String, Object?> json) =>
+    const JsonEncoder.withIndent('  ').convert(json);
 
 Future<void> _runProcess(
   String bin,

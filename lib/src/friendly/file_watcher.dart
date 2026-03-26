@@ -47,8 +47,7 @@ class FileChangeEvent {
   bool get isRenamed => type == FileChangeType.renamed;
 
   @override
-  String toString() =>
-      'FileChangeEvent('
+  String toString() => 'FileChangeEvent('
       'type: $type, '
       'path: ${file.path}'
       '${oldPath != null ? ', oldPath: $oldPath' : ''}'
@@ -115,7 +114,8 @@ class WatchBuilder {
 
   /// Match files with specific extension (without dot)
   void extension(String ext) {
-    _fileFilters.add((file) => file.extension.toLowerCase() == ext.toLowerCase());
+    _fileFilters
+        .add((file) => file.extension.toLowerCase() == ext.toLowerCase());
   }
 
   /// Match only markdown files

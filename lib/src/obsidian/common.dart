@@ -5,9 +5,11 @@ import 'dart:js_util' as jsu;
 
 import 'plugin_handle.dart';
 
-JSObject obsidianModule() => jsu.callMethod<JSObject>(jsu.globalThis, 'require', ['obsidian']);
+JSObject obsidianModule() =>
+    jsu.callMethod<JSObject>(jsu.globalThis, 'require', ['obsidian']);
 
-JSObject obsidianExport(String name) => jsu.getProperty<JSObject>(obsidianModule(), name);
+JSObject obsidianExport(String name) =>
+    jsu.getProperty<JSObject>(obsidianModule(), name);
 
 void setText(JSObject element, String text) =>
     jsu.setProperty<Object?>(element, 'textContent', text);

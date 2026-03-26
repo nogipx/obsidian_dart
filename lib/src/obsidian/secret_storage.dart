@@ -17,11 +17,11 @@ class SecretStorageHandle {
   final JSObject raw;
 
   bool get isAvailable => _hasAny(const [
-    'getSecret',
-    'get',
-    'setSecret',
-    'set',
-  ]);
+        'getSecret',
+        'get',
+        'setSecret',
+        'set',
+      ]);
 
   /// Reads a secret value by name. Returns `null` when missing or unsupported.
   Future<String?> getSecret(String name) async {
@@ -79,7 +79,8 @@ class SecretStorageHandle {
     return jsu.callConstructor<JSObject>(ctor, [containerEl]);
   }
 
-  bool _hasAny(List<String> names) => names.any((name) => jsu.hasProperty(raw, name));
+  bool _hasAny(List<String> names) =>
+      names.any((name) => jsu.hasProperty(raw, name));
 
   Future<T?> _invokeFirst<T>(List<String> names, List<Object?> args) async {
     for (final name in names) {
