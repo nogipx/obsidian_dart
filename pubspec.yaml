@@ -1,6 +1,6 @@
 name: obsidian_dart
-description: "Dart toolkit and runtime for building Obsidian plugins without TypeScript. Compiles to CommonJS for Obsidian 1.7+."
-version: 0.1.0
+description: "Dart toolkit and runtime for building Obsidian plugins without TypeScript. Compiles to CommonJS for Obsidian 1.7+. Part of Rhyolite Sync (https://rhyolite.nogipx.dev)."
+version: 0.1.1
 
 repository: https://github.com/nogipx/obsidian_dart
 issue_tracker: https://github.com/nogipx/obsidian_dart/issues

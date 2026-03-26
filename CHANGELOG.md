@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Updated README: added Rhyolite Sync mention.
+
 ## 0.1.0
 
 - Initial release.

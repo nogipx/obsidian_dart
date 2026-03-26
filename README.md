@@ -2,6 +2,12 @@
 
 A Dart toolkit and runtime for building [Obsidian](https://obsidian.md) plugins without writing TypeScript. Write your plugin in Dart, compile to CommonJS, and drop it into `.obsidian/plugins/`.
 
+---
+
+Built as part of **[Rhyolite Sync](https://rhyolite.nogipx.dev)** — an end-to-end encrypted sync service for Obsidian. Your notes stay yours: encryption keys never leave your devices, and the server only ever sees ciphertext.
+
+---
+
 ## Getting started
 
 ```bash
