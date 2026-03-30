@@ -35,10 +35,19 @@ class PluginSettingsTab {
     _onDisplayAsync = onDisplayAsync;
     _tabHandle =
         createSettingTab(plugin, name: name, onDisplay: _handleDisplay);
+    _containerEl = null;
   }
+
+  /// Internal constructor for group contexts — uses a custom container element.
+  PluginSettingsTab._group(this.plugin, JSObject groupEl)
+      : _tabHandle = _NoopSettingTabHandle(),
+        _containerEl = groupEl,
+        _onDisplay = null,
+        _onDisplayAsync = null;
 
   final PluginHandle plugin;
   late final PluginSettingTabHandle _tabHandle;
+  JSObject? _containerEl;
   void Function(PluginSettingsTab)? _onDisplay;
   Future<void> Function(PluginSettingsTab)? _onDisplayAsync;
 
@@ -49,7 +58,7 @@ class PluginSettingsTab {
   }
 
   /// Get the container element for adding custom UI.
-  JSObject get containerEl => _tabHandle.containerEl;
+  JSObject get containerEl => _containerEl ?? _tabHandle.containerEl;
 
   /// Add a section header using Obsidian's Setting.setHeading().
   PluginSettingsTab addSection(String title) {
@@ -202,6 +211,30 @@ class PluginSettingsTab {
     return this;
   }
 
+  /// Group multiple settings into one visual card.
+  ///
+  /// Settings added inside [builder] share a single rounded container,
+  /// separated by dividers — instead of each being its own card.
+  ///
+  /// Example:
+  /// ```dart
+  /// tab
+  ///   ..addSection('Authentication')
+  ///   ..addGroup((group) {
+  ///     group
+  ///       ..addButton(name: 'Sign in', ...)
+  ///       ..addButton(name: 'Create account', ...);
+  ///   });
+  /// ```
+  PluginSettingsTab addGroup(void Function(PluginSettingsTab group) builder) {
+    final groupEl = jsu.callMethod<JSObject>(containerEl, 'createDiv', [
+      jsu.jsify({'cls': 'obsidian-dart-group'}),
+    ]);
+    final group = PluginSettingsTab._group(plugin, groupEl);
+    builder(group);
+    return this;
+  }
+
   /// Display the settings tab.
   void show() {
     _tabHandle.display();
@@ -214,4 +247,18 @@ class PluginSettingsTab {
 
   /// Get the raw handle (for advanced use cases).
   PluginSettingTabHandle get handle => _tabHandle;
+}
+
+/// No-op tab handle used internally by group contexts.
+class _NoopSettingTabHandle implements PluginSettingTabHandle {
+  @override
+  void display() {}
+  @override
+  void hide() {}
+  @override
+  JSObject get containerEl => throw UnsupportedError('group has no tab handle');
+  @override
+  JSObject get raw => throw UnsupportedError('group has no tab handle');
+  @override
+  PluginHandle get plugin => throw UnsupportedError('group has no tab handle');
 }
