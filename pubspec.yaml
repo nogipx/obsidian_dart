@@ -1,7 +1,6 @@
 name: obsidian_dart
 description: "Dart toolkit and runtime for building Obsidian plugins without TypeScript."
-version: 0.1.2
-
+version: 0.2.0
 repository: https://github.com/nogipx/obsidian_dart
 issue_tracker: https://github.com/nogipx/obsidian_dart/issues
 
