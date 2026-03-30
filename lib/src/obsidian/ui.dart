@@ -102,18 +102,30 @@ class ModalContext<T> {
     ]);
   }
 
-  /// Shows an error message inside the modal (replaces previous error if any).
+  /// Shows an error message inside the modal as an Obsidian callout block.
+  /// Replaces the previous error if one is already shown.
   void showError(String message) {
     final existing = jsu.callMethod<JSObject?>(
       contentEl,
       'querySelector',
-      ['.rhyolite-modal-error'],
+      ['.obsidian-dart-modal-error'],
     );
     if (existing != null) {
-      setText(existing, message);
-    } else {
-      createEl('p', cls: 'rhyolite-modal-error', text: message);
+      final p = jsu.callMethod<JSObject?>(existing, 'querySelector', ['p']);
+      if (p != null) setText(p, message);
+      return;
     }
+    final callout = jsu.callMethod<JSObject>(contentEl, 'createDiv', [
+      jsu.jsify({'cls': 'callout obsidian-dart-modal-error'}),
+    ]);
+    jsu.callMethod<void>(callout, 'setAttribute', ['data-callout', 'danger']);
+    final content = jsu.callMethod<JSObject>(callout, 'createDiv', [
+      jsu.jsify({'cls': 'callout-content'}),
+    ]);
+    jsu.callMethod<JSObject>(content, 'createEl', [
+      'p',
+      jsu.jsify({'text': message}),
+    ]);
   }
 
   ButtonRef button(

@@ -228,7 +228,7 @@ class PluginSettingsTab {
   /// ```
   PluginSettingsTab addGroup(void Function(PluginSettingsTab group) builder) {
     final groupEl = jsu.callMethod<JSObject>(containerEl, 'createDiv', [
-      jsu.jsify({'cls': 'obsidian-dart-group'}),
+      jsu.jsify({'cls': 'obsidian-dart-group card'}),
     ]);
     final group = PluginSettingsTab._group(plugin, groupEl);
     builder(group);

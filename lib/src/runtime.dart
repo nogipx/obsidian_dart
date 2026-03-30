@@ -27,7 +27,7 @@ const _kCss = '''
 .obsidian-dart-space-h--16 { display: inline-block; margin-left: 16px; }
 .obsidian-dart-space-h--24 { display: inline-block; margin-left: 24px; }
 
-.obsidian-dart-group { border-radius: var(--radius-m); border: 1px solid var(--background-modifier-border); overflow: hidden; }
+.obsidian-dart-group.card { padding: 0; margin: 0; overflow: hidden; }
 .obsidian-dart-group .setting-item:last-child { border-bottom: none; }
 ''';
 
