@@ -16,62 +16,6 @@ Future<T?> showModalWith<T>(
   return ctx._open();
 }
 
-/// Password prompt — same as [showTextPrompt] but input type is 'password'.
-///
-/// Returns `null` if the user closes or cancels.
-Future<String?> showPasswordPrompt(
-  PluginHandle plugin, {
-  String title = 'Enter passphrase',
-  String placeholder = '',
-  String okLabel = 'Unlock',
-  String cancelLabel = 'Cancel',
-}) {
-  return showModalWith<String?>(
-    plugin,
-    build: (ctx) {
-      ctx.h3(title);
-      final input = ctx.input(type: 'password', placeholder: placeholder)
-        ..focus();
-      ctx
-        ..buttonRow(
-          [
-            ButtonSpec(okLabel, () => ctx.close(ctx.valueOf(input))),
-            ButtonSpec(cancelLabel, () => ctx.close(null)),
-          ],
-        )
-        ..onEnter(input, () => ctx.close(ctx.valueOf(input)))
-        ..onEscape(() => ctx.close(null));
-    },
-  );
-}
-
-/// Simplest text prompt using Obsidian Modal (since `prompt()` is unavailable).
-///
-/// Returns `null` if the user closes or cancels.
-Future<String?> showTextPrompt(
-  PluginHandle plugin, {
-  String title = 'Input',
-  String placeholder = '',
-  String okLabel = 'OK',
-  String cancelLabel = 'Cancel',
-}) {
-  return showModalWith<String?>(
-    plugin,
-    build: (ctx) {
-      ctx.h3(title);
-      final input = ctx.input(placeholder: placeholder)..focus();
-      ctx
-        ..buttonRow(
-          [
-            ButtonSpec(okLabel, () => ctx.close(ctx.valueOf(input))),
-            ButtonSpec(cancelLabel, () => ctx.close(null)),
-          ],
-        )
-        ..onEnter(input, () => ctx.close(ctx.valueOf(input)))
-        ..onEscape(() => ctx.close(null));
-    },
-  );
-}
 
 /// Fluent helpers to build modal content.
 class ModalContext<T> {
