@@ -116,12 +116,8 @@ class StatusItem {
   void setText(String text) =>
       jsu.setProperty<dynamic>(el, 'textContent', text);
 
-  void setIcon(String iconSvgOrText) {
-    if (iconSvgOrText.trim().startsWith('<')) {
-      jsu.setProperty(el, 'innerHTML', iconSvgOrText);
-    } else {
-      setText(iconSvgOrText);
-    }
+  void setIcon(String text) {
+    setText(text);
   }
 
   void setTooltip(String tooltip) {

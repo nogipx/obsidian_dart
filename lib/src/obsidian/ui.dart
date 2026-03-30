@@ -92,46 +92,38 @@ class ModalContext<T> {
   late final JSObject contentEl;
   final _completer = Completer<T?>();
 
-  JSObject createEl(String tag, {String? cls, String? text, String? style}) {
+  JSObject createEl(String tag, {String? cls, String? text}) {
     final el = jsu.callMethod<JSObject>(contentEl, 'createEl', [tag]);
     if (cls != null) jsu.setProperty(el, 'className', cls);
     if (text != null) setText(el, text);
-    if (style != null) jsu.setProperty(el, 'style', style);
     return el;
   }
 
   JSObject h3(String text) => createEl('h3', text: text);
 
   void spaceVertical({int px = 12}) {
-    final el = createEl('div');
-    jsu.setProperty(el, 'style', 'margin-top: ${px}px');
+    createEl('div', cls: 'obsidian-dart-space-v obsidian-dart-space-v--$px');
   }
 
   void spaceHorizontal({int px = 12}) {
-    final el = createEl('span');
-    jsu.setProperty(el, 'style', 'display: inline-block; margin-left: ${px}px');
+    createEl('span', cls: 'obsidian-dart-space-h obsidian-dart-space-h--$px');
   }
 
   void row(void Function(LayoutContext ctx) build, {String? cls}) {
-    final el = createEl('div', cls: cls);
-    jsu.setProperty(
-        el, 'style', 'display: flex; flex-direction: row; align-items: center');
+    final combined = ['obsidian-dart-row', if (cls != null) cls].join(' ');
+    final el = createEl('div', cls: combined);
     build(LayoutContext(el));
   }
 
   void column(void Function(LayoutContext ctx) build, {String? cls}) {
-    final el = createEl('div', cls: cls);
-    jsu.setProperty(el, 'style', 'display: flex; flex-direction: column');
+    final combined = ['obsidian-dart-column', if (cls != null) cls].join(' ');
+    final el = createEl('div', cls: combined);
     build(LayoutContext(el));
   }
 
   /// Creates a hidden spinner element. Call [SpinnerRef.show] to start and [SpinnerRef.hide] to stop.
-  SpinnerRef spinner({String label = '', String? style}) {
-    final el = createEl(
-      'span',
-      style:
-          'display: none; color: var(--text-muted); font-size: 0.85em${style != null ? '; $style' : ''}',
-    );
+  SpinnerRef spinner({String label = ''}) {
+    final el = createEl('span', cls: 'obsidian-dart-spinner');
     return SpinnerRef(el, label: label);
   }
 
@@ -300,8 +292,8 @@ class SpinnerRef {
   static const _frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
 
   void show() {
-    jsu.setProperty(_el, 'style',
-        'display: inline; color: var(--text-muted); font-size: 0.85em');
+    jsu.callMethod<void>(_el, 'removeClass', ['obsidian-dart-spinner--hidden']);
+    jsu.callMethod<void>(_el, 'addClass', ['obsidian-dart-spinner--visible']);
     _intervalId = jsu.callMethod<Object>(jsu.globalThis, 'setInterval', [
       jsu.allowInterop(() {
         _frame = (_frame + 1) % _frames.length;
@@ -316,7 +308,8 @@ class SpinnerRef {
       jsu.callMethod<void>(jsu.globalThis, 'clearInterval', [_intervalId]);
       _intervalId = null;
     }
-    jsu.setProperty(_el, 'style', 'display: none');
+    jsu.callMethod<void>(_el, 'removeClass', ['obsidian-dart-spinner--visible']);
+    jsu.callMethod<void>(_el, 'addClass', ['obsidian-dart-spinner--hidden']);
   }
 }
 
@@ -327,7 +320,7 @@ class LayoutContext {
 
   final JSObject _el;
 
-  JSObject createEl(String tag, {String? cls, String? text, String? style}) {
+  JSObject createEl(String tag, {String? cls, String? text}) {
     final el = jsu.callMethod<JSObject>(_el, 'createEl', [tag]);
     if (cls != null) {
       jsu.setProperty(el, 'className', cls);
@@ -335,32 +328,26 @@ class LayoutContext {
     if (text != null) {
       setText(el, text);
     }
-    if (style != null) {
-      jsu.setProperty(el, 'style', style);
-    }
     return el;
   }
 
   void spaceVertical({int px = 12}) {
-    final el = createEl('div');
-    jsu.setProperty(el, 'style', 'margin-top: ${px}px');
+    createEl('div', cls: 'obsidian-dart-space-v obsidian-dart-space-v--$px');
   }
 
   void spaceHorizontal({int px = 12}) {
-    final el = createEl('span');
-    jsu.setProperty(el, 'style', 'display: inline-block; margin-left: ${px}px');
+    createEl('span', cls: 'obsidian-dart-space-h obsidian-dart-space-h--$px');
   }
 
   void row(void Function(LayoutContext ctx) build, {String? cls}) {
-    final el = createEl('div', cls: cls);
-    jsu.setProperty(
-        el, 'style', 'display: flex; flex-direction: row; align-items: center');
+    final combined = ['obsidian-dart-row', if (cls != null) cls].join(' ');
+    final el = createEl('div', cls: combined);
     build(LayoutContext(el));
   }
 
   void column(void Function(LayoutContext ctx) build, {String? cls}) {
-    final el = createEl('div', cls: cls);
-    jsu.setProperty(el, 'style', 'display: flex; flex-direction: column');
+    final combined = ['obsidian-dart-column', if (cls != null) cls].join(' ');
+    final el = createEl('div', cls: combined);
     build(LayoutContext(el));
   }
 }

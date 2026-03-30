@@ -51,16 +51,11 @@ class PluginSettingsTab {
   /// Get the container element for adding custom UI.
   JSObject get containerEl => _tabHandle.containerEl;
 
-  /// Add a section header (h2 element).
+  /// Add a section header using Obsidian's Setting.setHeading().
   PluginSettingsTab addSection(String title) {
-    jsu.callMethod<JSObject>(
-      containerEl,
-      'createEl',
-      [
-        'h2',
-        jsu.jsify({'text': title}),
-      ],
-    );
+    createSetting(containerEl)
+      ..setName(title)
+      ..setHeading();
     return this;
   }
 

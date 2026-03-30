@@ -77,6 +77,13 @@ class SettingHandle {
     return this;
   }
 
+  /// Mark this setting as a section heading.
+  /// Use this instead of raw h1/h2 elements for section headers.
+  SettingHandle setHeading() {
+    jsu.callMethod<JSObject>(_setting, 'setHeading', []);
+    return this;
+  }
+
   /// Add a text input component.
   SettingHandle addText(void Function(TextComponentHandle) cb) {
     jsu.callMethod<JSObject>(_setting, 'addText', [
