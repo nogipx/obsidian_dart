@@ -16,7 +16,6 @@ Future<T?> showModalWith<T>(
   return ctx._open();
 }
 
-
 /// Fluent helpers to build modal content.
 class ModalContext<T> {
   ModalContext._(PluginHandle plugin)
@@ -252,8 +251,12 @@ class SpinnerRef {
       jsu.callMethod<void>(jsu.globalThis, 'clearInterval', [_intervalId]);
       _intervalId = null;
     }
-    jsu.callMethod<void>(_el, 'removeClass', ['obsidian-dart-spinner--visible']);
-    jsu.callMethod<void>(_el, 'addClass', ['obsidian-dart-spinner--hidden']);
+    jsu.callMethod<void>(_el, 'removeClass', [
+      'obsidian-dart-spinner--visible',
+    ]);
+    jsu.callMethod<void>(_el, 'addClass', [
+      'obsidian-dart-spinner--hidden',
+    ]);
   }
 }
 

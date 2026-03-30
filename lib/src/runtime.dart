@@ -31,27 +31,52 @@ const _kCss = '''
 .obsidian-dart-group .setting-item:last-child { border-bottom: none; }
 ''';
 
-void _injectStyles() {
+void _injectStyles({String? extraCss}) {
   final document = jsu.getProperty<JSObject>(jsu.globalThis, 'document');
-  final existing = jsu.callMethod<JSObject?>(document, 'getElementById', [_kStyleId]);
+  final existing = jsu.callMethod<JSObject?>(document, 'getElementById', [
+    _kStyleId,
+  ]);
   if (existing != null) return;
-  final style = jsu.callMethod<JSObject>(document, 'createElement', ['style']);
+  final style = jsu.callMethod<JSObject>(document, 'createElement', [
+    'style',
+  ]);
   jsu.setProperty(style, 'id', _kStyleId);
-  jsu.setProperty(style, 'textContent', _kCss);
+  final css = extraCss != null ? '$_kCss\n$extraCss' : _kCss;
+  jsu.setProperty(style, 'textContent', css);
   final head = jsu.getProperty<JSObject>(document, 'head');
   jsu.callMethod<void>(head, 'appendChild', [style]);
 }
 
 void _removeStyles() {
   final document = jsu.getProperty<JSObject>(jsu.globalThis, 'document');
-  final existing = jsu.callMethod<JSObject?>(document, 'getElementById', [_kStyleId]);
+  final existing = jsu.callMethod<JSObject?>(document, 'getElementById', [
+    _kStyleId,
+  ]);
   if (existing != null) {
     jsu.callMethod<void>(existing, 'remove', []);
   }
 }
 
 /// Registers Dart lifecycle hooks so a small JS wrapper can delegate to them.
-void bootstrapPlugin({required OnLoad onLoad, OnUnload? onUnload}) {
+///
+/// [extraCss] is injected into the document alongside the library's base styles.
+/// Use it to add plugin-specific CSS classes instead of inline styles.
+///
+/// Example:
+/// ```dart
+/// bootstrapPlugin(
+///   extraCss: '''
+///     .my-plugin-muted { color: var(--text-muted); font-size: 0.85em; }
+///     .my-plugin-warning { color: var(--text-warning); }
+///   ''',
+///   onLoad: (plugin) async { ... },
+/// );
+/// ```
+void bootstrapPlugin({
+  required OnLoad onLoad,
+  OnUnload? onUnload,
+  String? extraCss,
+}) {
   final container = jsu.newObject<JSObject>();
 
   jsu.setProperty(
@@ -59,7 +84,7 @@ void bootstrapPlugin({required OnLoad onLoad, OnUnload? onUnload}) {
     'onload',
     jsu.allowInterop(
       (JSAny plugin) async {
-        _injectStyles();
+        _injectStyles(extraCss: extraCss);
         await onLoad(PluginHandle(plugin as JSObject));
       },
     ),
