@@ -31,26 +31,52 @@ const _kCss = '''
 .obsidian-dart-group .setting-item:last-child { border-bottom: none; }
 ''';
 
-void _injectStyles({String? extraCss}) {
+/// Style element id for [plugin], so each plugin owns its own `<style>`.
+///
+/// A single shared id was wrong in two ways at once. Two obsidian_dart plugins
+/// in one vault: the second one's [bootstrapPlugin] `extraCss` was never
+/// injected (the element already existed), and whichever unloaded first took
+/// the stylesheet away from the other. One plugin reloading: the outgoing
+/// instance's removal ran after the incoming instance's injection, leaving the
+/// running plugin with no styles at all.
+String _styleIdFor(JSAny plugin) {
+  try {
+    final manifest = jsu.getProperty<Object?>(plugin, 'manifest');
+    final id = manifest == null
+        ? null
+        : jsu.getProperty<String?>(manifest, 'id');
+    if (id != null && id.isNotEmpty) return '$_kStyleId-$id';
+  } catch (_) {
+    // Fall through to the unscoped id.
+  }
+  return _kStyleId;
+}
+
+void _injectStyles(String styleId, {String? extraCss}) {
   final document = jsu.getProperty<JSObject>(jsu.globalThis, 'document');
   final existing = jsu.callMethod<JSObject?>(document, 'getElementById', [
-    _kStyleId,
+    styleId,
   ]);
-  if (existing != null) return;
+  // A reload can inject before the outgoing instance removed its element.
+  // Replace the contents rather than bail, or the new instance inherits a
+  // stylesheet that is about to be torn out from under it.
+  if (existing != null) {
+    jsu.callMethod<void>(existing, 'remove', []);
+  }
   final style = jsu.callMethod<JSObject>(document, 'createElement', [
     'style',
   ]);
-  jsu.setProperty(style, 'id', _kStyleId);
+  jsu.setProperty(style, 'id', styleId);
   final css = extraCss != null ? '$_kCss\n$extraCss' : _kCss;
   jsu.setProperty(style, 'textContent', css);
   final head = jsu.getProperty<JSObject>(document, 'head');
   jsu.callMethod<void>(head, 'appendChild', [style]);
 }
 
-void _removeStyles() {
+void _removeStyles(String styleId) {
   final document = jsu.getProperty<JSObject>(jsu.globalThis, 'document');
   final existing = jsu.callMethod<JSObject?>(document, 'getElementById', [
-    _kStyleId,
+    styleId,
   ]);
   if (existing != null) {
     jsu.callMethod<void>(existing, 'remove', []);
@@ -84,7 +110,7 @@ void bootstrapPlugin({
     'onload',
     jsu.allowInterop(
       (JSAny plugin) async {
-        _injectStyles(extraCss: extraCss);
+        _injectStyles(_styleIdFor(plugin), extraCss: extraCss);
         await onLoad(PluginHandle(plugin as JSObject));
       },
     ),
@@ -95,11 +121,15 @@ void bootstrapPlugin({
     'onunload',
     jsu.allowInterop(
       (JSAny plugin) async {
-        _removeStyles();
+        _removeStyles(_styleIdFor(plugin));
         if (onUnload != null) await onUnload(PluginHandle(plugin as JSObject));
       },
     ),
   );
 
+  // A rendezvous slot, read once per Plugin instance by the generated JS
+  // wrapper (see `compose/build_common.dart`). Overwriting it on every
+  // evaluation is fine BECAUSE the wrapper captures it in its constructor —
+  // do not change the wrapper back to reading this per call.
   jsu.setProperty(jsu.globalThis, '_dartObsidianPlugin', container);
 }

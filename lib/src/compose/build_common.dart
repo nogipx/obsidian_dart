@@ -58,14 +58,31 @@ Future<void> buildPlugin({
     ..writeln()
     ..writeln(dartJsBody.trim())
     ..writeln()
+    // `globalThis._dartObsidianPlugin` is a rendezvous slot: evaluating this
+    // bundle runs Dart `main()`, which publishes THAT evaluation's hooks there.
+    // The slot is therefore captured once, here at module scope — the same
+    // synchronous turn that published it, so nothing can re-point it in
+    // between. Never read it per call.
+    //
+    // Reading it inside onunload was a real defect. A reload re-evaluates the
+    // bundle, so the slot already pointed at the incoming instance by the time
+    // the outgoing one was told to unload: the outgoing instance ran the
+    // INCOMING instance's teardown — gutting the plugin that had just started —
+    // while its own settings tab, status-bar items and listeners were never
+    // released. Every reload leaked one instance's UI and broke the live one, a
+    // cascade rather than a one-off, since each attempt to fix it by toggling
+    // the plugin added another orphan.
+    //
+    // Capturing in the constructor would also have worked for Obsidian, which
+    // constructs right after evaluating. Module scope additionally survives a
+    // host that evaluates several bundles before constructing any of them.
+    ..writeln('const __dartImpl = globalThis._dartObsidianPlugin;')
     ..writeln('module.exports = class $pluginClass extends Plugin {')
     ..writeln('  async onload() {')
-    ..writeln('    const impl = globalThis._dartObsidianPlugin;')
-    ..writeln('    if (impl?.onload) return await impl.onload(this);')
+    ..writeln('    if (__dartImpl?.onload) return await __dartImpl.onload(this);')
     ..writeln('  }')
     ..writeln('  onunload() {')
-    ..writeln('    const impl = globalThis._dartObsidianPlugin;')
-    ..writeln('    if (impl?.onunload) return impl.onunload(this);')
+    ..writeln('    if (__dartImpl?.onunload) return __dartImpl.onunload(this);')
     ..writeln('  }')
     ..writeln('};')
     ..writeln();
